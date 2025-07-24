@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import RemoveFormAttributes from "@/components/RemoveFormAttributes"
 import Image from "next/image"
 import {
@@ -19,6 +19,73 @@ import {
   Coffee,
   Zap,
 } from "lucide-react"
+
+interface AnimatedTextProps {
+  text: string
+  className?: string
+}
+
+const AnimatedText = ({ text, className = "" }: AnimatedTextProps) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const letters = text.split('')
+
+  const handleMouseEnter = useCallback((index: number) => {
+    setHoveredIndex(index)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredIndex(null)
+  }, [])
+
+  return (
+    <span className={`inline-flex ${className}`}>
+      {letters.map((letter, index) => (
+        <span
+          key={index}
+          className={`inline-block transition-all duration-300 transform ${
+            hoveredIndex === index 
+              ? 'text-orange-400 scale-110' 
+              : 'hover:scale-95 hover:text-orange-300'
+          }`}
+          onMouseEnter={() => handleMouseEnter(index)}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            display: 'inline-block',
+            transformOrigin: 'center',
+            animation: hoveredIndex === index ? 'jelly 0.5s' : 'none',
+          }}
+        >
+          {letter === ' ' ? '\u00A0' : letter}
+        </span>
+      ))}
+      <style jsx global>{`
+        @keyframes jelly {
+          0% {
+            transform: scale(1, 1);
+          }
+          30% {
+            transform: scale(1.25, 0.75);
+          }
+          40% {
+            transform: scale(0.75, 1.25);
+          }
+          50% {
+            transform: scale(1.15, 0.85);
+          }
+          65% {
+            transform: scale(0.95, 1.05);
+          }
+          75% {
+            transform: scale(1.05, 0.95);
+          }
+          100% {
+            transform: scale(1, 1);
+          }
+        }
+      `}</style>
+    </span>
+  )
+}
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
@@ -492,7 +559,7 @@ export default function HomePage() {
       {/* Custom Cursor */}
       <div
         ref={cursorRef}
-        className="fixed-cursor w-4 h-4 bg-purple-500 rounded-full mix-blend-difference transition-transform duration-100"
+        className="fixed-cursor w-4 h-4 bg-teal-500 rounded-full mix-blend-difference transition-transform duration-100"
         style={{ transform: "translate(-50%, -50%)" }}
       />
 
@@ -501,7 +568,7 @@ export default function HomePage() {
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute w-1 h-1 bg-purple-400 rounded-full opacity-60"
+            className="absolute w-1 h-1 bg-teal-400 rounded-full opacity-60"
             style={{
               left: particle.x,
               top: particle.y,
@@ -576,16 +643,16 @@ export default function HomePage() {
           {/* Left Content */}
           <div className="space-y-8 lg:pr-12 pt-8 md:pt-0">
             <div className="space-y-6">
-              <div className="flex items-center space-x-2 text-purple-400 mb-4">
+              <div className="flex items-center space-x-2 text-teal-400 mb-4">
                 <Sparkles className="w-5 h-5 animate-pulse" />
                 <span className="text-sm uppercase tracking-wider">Myself: Mohammed Sami</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Front-End Software
+                <AnimatedText text="Front-End Software" />
                 <br />
-                <span className="text-white/90 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  Developer
+                <span className="text-white/90 bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
+                  <AnimatedText text="Developer" />
                 </span>
               </h1>
 
@@ -596,7 +663,7 @@ export default function HomePage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
               <a href="/RESUME_UPDATED.pdf" download>
-                <div className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors cursor-pointer group">
+                <div className="flex items-center space-x-2 text-teal-400 hover:text-teal-300 transition-colors cursor-pointer group">
                   <span className="text-lg">Download Resume</span>
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -620,7 +687,7 @@ export default function HomePage() {
             >
               {/* Main Monitor with Enhanced Terminal - Positioned 100px from top */}
               <div className="relative z-10 transition-transform duration-500 group mb-16 mt-24">
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 shadow-2xl border border-gray-700 group-hover:border-purple-500/50 transition-colors">
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 shadow-2xl border border-gray-700 group-hover:border-teal-500/50 transition-colors">
                   <div className="bg-black rounded-md h-64 md:h-80 relative overflow-hidden">
                     <div className="absolute top-2 left-2 flex space-x-1">
                       <div className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 cursor-pointer transition-colors"></div>
@@ -633,7 +700,7 @@ export default function HomePage() {
                       <button
                         onClick={() => setTerminalMode("terminal")}
                         className={`w-6 h-6 rounded flex items-center justify-center transition-colors ${
-                          terminalMode === "terminal" ? "bg-purple-600" : "bg-gray-700 hover:bg-gray-600"
+                          terminalMode === "terminal" ? "bg-teal-600" : "bg-gray-700 hover:bg-gray-600"
                         }`}
                       >
                         <Terminal className="w-3 h-3 text-white" />
@@ -651,12 +718,12 @@ export default function HomePage() {
                     <div className="p-4 pt-8 text-green-400 font-mono text-xs h-full flex flex-col">
                       {terminalMode === "terminal" && (
                         <>
-                          <div className="mb-2 text-purple-400 flex items-center space-x-2">
+                          <div className="mb-2 text-teal-400 flex items-center space-x-2">
                             <span>~/portfolio $</span>
                             {soundEnabled && <Volume2 className="w-3 h-3 animate-pulse" />}
                           </div>
                           <div className="mb-2 text-white flex items-center">
-                            <span className="text-purple-400 mr-1">$</span>
+                            <span className="text-teal-400 mr-1">$</span>
                             <input
                               ref={terminalInputRef}
                               type="text"
@@ -774,7 +841,7 @@ export default function HomePage() {
                           <div className="text-blue-400 mb-2">portfolio.js</div>
                           <div className="text-gray-300 text-xs leading-relaxed">
                             <div>
-                              <span className="text-purple-400">const</span>{" "}
+                              <span className="text-teal-400">const</span>{" "}
                               <span className="text-blue-300">developer</span> = {`{`}
                             </div>
                             <div className="ml-4">
@@ -793,7 +860,7 @@ export default function HomePage() {
                             </div>
                             <div>{`};`}</div>
                             <div className="mt-2">
-                              <span className="text-purple-400">export default</span> developer;
+                              <span className="text-teal-400">export default</span> developer;
                             </div>
                           </div>
                         </div>
@@ -806,7 +873,7 @@ export default function HomePage() {
               {/* Reposition secondary screen to not interfere
               <div className="absolute -top-8 -right-4 transform -rotate-12 hover:-rotate-6 transition-transform duration-500">
                 <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg p-3 shadow-xl border border-gray-600 w-40 h-28 hover:border-green-500/50 transition-colors">
-                  <div className="bg-black rounded h-full p-2 text-purple-400 font-mono text-xs">
+                  <div className="bg-black rounded h-full p-2 text-teal-400 font-mono text-xs">
                     <div className="flex items-center space-x-1">
                       <Zap className="w-3 h-3 text-yellow-400" />
                       <span>npm install</span>
@@ -825,17 +892,17 @@ export default function HomePage() {
 
               {/* Enhanced Purple Diamond */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-                <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-purple-700 transform rotate-45 rounded-lg shadow-2xl animate-pulse hover:scale-110 transition-transform cursor-pointer group">
+                <div className="w-24 h-24 bg-gradient-to-br from-teal-500 to-teal-700 transform rotate-45 rounded-lg shadow-2xl animate-pulse hover:scale-110 transition-transform cursor-pointer group">
                   <div className="absolute inset-4 bg-white/20 rounded transform -rotate-45 flex items-center justify-center group-hover:bg-white/30 transition-colors">
                     <div className="text-white font-bold text-lg transform rotate-45">{"</>"}</div>
                   </div>
-                  <div className="absolute -inset-2 bg-purple-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute -inset-2 bg-teal-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </div>
 
               {/* Enhanced Functional Keyboard - Positioned below laptop with proper spacing */}
               <div className="relative z-10 mt-8">
-                <div className="bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg p-3 shadow-xl w-80 h-24 hover:shadow-purple-500/20 hover:shadow-2xl transition-shadow mx-auto">
+                <div className="bg-gradient-to-br from-gray-600 to-gray-700 rounded-lg p-3 shadow-xl w-80 h-24 hover:shadow-teal-500/20 hover:shadow-2xl transition-shadow mx-auto">
                   <div className="space-y-1">
                     {/* First Row */}
                     <div className="flex justify-center space-x-1">
@@ -844,7 +911,7 @@ export default function HomePage() {
                           key={key}
                           className={`w-6 h-4 bg-gray-800 rounded-sm flex items-center justify-center text-white text-xs font-mono transition-all duration-150 ${
                             pressedKeys.has(key)
-                              ? "bg-purple-600 scale-95 shadow-lg shadow-purple-500/50"
+                              ? "bg-teal-600 scale-95 shadow-lg shadow-teal-500/50"
                               : "hover:bg-gray-700 hover:shadow-md"
                           }`}
                         >
@@ -860,7 +927,7 @@ export default function HomePage() {
                           key={key}
                           className={`w-6 h-4 bg-gray-800 rounded-sm flex items-center justify-center text-white text-xs font-mono transition-all duration-150 ${
                             pressedKeys.has(key)
-                              ? "bg-purple-600 scale-95 shadow-lg shadow-purple-500/50"
+                              ? "bg-teal-600 scale-95 shadow-lg shadow-teal-500/50"
                               : "hover:bg-gray-700 hover:shadow-md"
                           }`}
                         >
@@ -876,7 +943,7 @@ export default function HomePage() {
                           key={key}
                           className={`w-6 h-4 bg-gray-800 rounded-sm flex items-center justify-center text-white text-xs font-mono transition-all duration-150 ${
                             pressedKeys.has(key)
-                              ? "bg-purple-600 scale-95 shadow-lg shadow-purple-500/50"
+                              ? "bg-teal-600 scale-95 shadow-lg shadow-teal-500/50"
                               : "hover:bg-gray-700 hover:shadow-md"
                           }`}
                         >
@@ -890,7 +957,7 @@ export default function HomePage() {
                       <div
                         className={`w-32 h-4 bg-gray-800 rounded-sm flex items-center justify-center text-white text-xs font-mono transition-all duration-150 ${
                           pressedKeys.has(" ")
-                            ? "bg-purple-600 scale-95 shadow-lg shadow-purple-500/50"
+                            ? "bg-teal-600 scale-95 shadow-lg shadow-teal-500/50"
                             : "hover:bg-gray-700 hover:shadow-md"
                         }`}
                       >
@@ -930,7 +997,7 @@ export default function HomePage() {
 
               {/* Enhanced Floating Elements */}
               <div
-                className="absolute top-8 -left-4 w-4 h-4 bg-purple-500 transform rotate-45 animate-bounce hover:bg-purple-400 transition-colors cursor-pointer"
+                className="absolute top-8 -left-4 w-4 h-4 bg-teal-500 transform rotate-45 animate-bounce hover:bg-teal-400 transition-colors cursor-pointer"
                 style={{ animationDelay: "0s" }}
               ></div>
               <div
@@ -947,7 +1014,7 @@ export default function HomePage() {
 
         {/* Enhanced Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl animate-pulse"></div>
           <div
             className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse"
             style={{ animationDelay: "1s" }}
@@ -963,14 +1030,12 @@ export default function HomePage() {
       <section ref={portfolioRef} className="relative min-h-screen flex items-center py-20">
         <div className="container mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
-            <div className="flex items-center justify-center space-x-2 text-purple-400 mb-4">
+            <div className="flex items-center justify-center space-x-2 text-teal-400 mb-4">
               <FileText className="w-5 h-5" />
               <span className="text-sm uppercase tracking-wider">My Work</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-lg">
-              Portfolio & Projects
-            </h2><br/>
+            <h2 className="text-4xl font-bold mb-6">Portfolio & Projects</h2>
             <p className="text-lg text-white/70 leading-relaxed max-w-2xl mx-auto mb-8">
               I have built various different projects to fit different aspects of the client's business. If you want to
               see more examples of my work than the ones showcased in this site, please{" "}
@@ -979,7 +1044,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center space-y-4">
               <button
                 onClick={toggleProjects}
-                className="flex items-center space-x-2 text-purple-400 hover:text-purple-300 transition-colors group"
+                className="flex items-center space-x-2 text-teal-400 hover:text-teal-300 transition-colors group"
                 aria-expanded={showProjects}
                 aria-controls="projects-grid"
               >
@@ -999,7 +1064,7 @@ export default function HomePage() {
                 {projects.map((project, index) => (
                   <div 
                     key={index} 
-                    className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/10"
+                    className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-800 hover:border-teal-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-400/10"
                   >
                     <div className="aspect-video bg-gray-800 relative overflow-hidden">
                       <div className="relative w-full h-full">
@@ -1024,7 +1089,7 @@ export default function HomePage() {
                             href={project.link} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-colors"
+                            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-teal-600 hover:bg-teal-700 text-white transition-colors"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -1055,7 +1120,7 @@ export default function HomePage() {
                         {project.tech.map((tech, techIndex) => (
                           <span 
                             key={techIndex} 
-                            className="text-xs px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700 hover:bg-purple-500/20 hover:border-purple-500/30 hover:text-purple-300 transition-colors"
+                            className="text-xs px-3 py-1 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700 hover:bg-teal-600/20 hover:border-teal-500/30 hover:text-teal-300 transition-colors"
                           >
                             {tech}
                           </span>
@@ -1073,7 +1138,7 @@ export default function HomePage() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl animate-float"></div>
           <div
-            className="absolute top-40 right-32 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl animate-float"
+            className="absolute top-40 right-32 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl animate-float"
             style={{ animationDelay: "1s" }}
           ></div>
           <div
@@ -1081,7 +1146,7 @@ export default function HomePage() {
             style={{ animationDelay: "2s" }}
           ></div>
           <div
-            className="absolute bottom-20 right-20 w-40 h-40 bg-purple-600/10 rounded-full blur-2xl animate-float"
+            className="absolute bottom-20 right-20 w-40 h-40 bg-teal-600/10 rounded-full blur-2xl animate-float"
             style={{ animationDelay: "0.5s" }}
           ></div>
         </div>
@@ -1094,9 +1159,7 @@ export default function HomePage() {
             <p className="text-sm text-white/60 uppercase tracking-wider mb-8">
               A PROBLEM IS A CHANCE FOR YOU TO DO YOUR BEST
             </p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight drop-shadow-lg">
-              Skills 
-            </h2><br/>
+            <h2 className="text-4xl font-bold mb-6">Skills</h2>
             <div className="max-w-4xl mx-auto space-y-6 text-lg text-white/70 leading-relaxed">
               <p>The main area of expertise is front end development (client side of the web).</p>
               <p>
@@ -1381,8 +1444,8 @@ export default function HomePage() {
 
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/3 right-10 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-r from-teal-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/3 right-10 w-96 h-96 bg-gradient-to-r from-blue-500/5 to-teal-500/5 rounded-full blur-3xl"></div>
         </div>
       </section>
 
@@ -1390,7 +1453,7 @@ export default function HomePage() {
   <div className="container mx-auto px-4 sm:px-6 md:px-12 h-full flex flex-col justify-center">
     {/* Header */} {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center space-x-2 text-purple-400 mb-4">
+          <div className="flex items-center justify-center space-x-2 text-teal-400 mb-4">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
@@ -1412,7 +1475,7 @@ export default function HomePage() {
             <button
               className={`px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition-all duration-300 ${
                 activeTab === "exp"
-                  ? "bg-purple-600 text-white shadow-inner"
+                  ? "bg-teal-600 text-white shadow-inner"
                   : "text-white/70 hover:text-white"
               }`}
               onClick={() => setActiveTab("exp")}
@@ -1435,17 +1498,17 @@ export default function HomePage() {
         {/* Timeline Container */}
         <div className="max-w-4xl mx-auto w-full relative">
           {/* Vertical Line */}
-          <div className="absolute left-0 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-px bg-gradient-to-b from-purple-500/50 via-blue-500/50 to-purple-500/50 pointer-events-none" />
+          <div className="absolute left-0 sm:left-1/2 transform sm:-translate-x-1/2 h-full w-px bg-gradient-to-b from-teal-500/50 via-blue-500/50 to-teal-500/50 pointer-events-none" />
 
           {/* Work Experience */}
           {activeTab === "exp" && (
             <div className="space-y-10 transition-all duration-500 animate-fade-in">
               {/* Experience Item */}
               <div className="relative flex flex-col sm:flex-row items-start">
-                <div className="absolute left-0 sm:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 rounded-full border-4 border-gray-900 z-10"></div>
+                <div className="absolute left-0 sm:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-teal-500 rounded-full border-4 border-gray-900 z-10"></div>
                 <div className="sm:w-1/2 sm:pr-12 sm:text-right ml-6 sm:ml-0">
-                  <div className="bg-gray-900/50 border border-gray-800 hover:border-purple-500/30 p-6 rounded-lg transition-all duration-300">
-                    <span className="text-purple-400 text-sm font-medium">Jan 27,2025 - May 05,2025</span>
+                  <div className="bg-gray-900/50 border border-gray-800 hover:border-teal-500/30 p-6 rounded-lg transition-all duration-300">
+                    <span className="text-teal-400 text-sm font-medium">Jan 27,2025 - May 05,2025</span>
                     <h3 className="text-xl font-bold mt-1 mb-2">Full Stack Developer</h3>
                     <p className="text-white/70">PalindromeLabs</p>
                     <p className="text-white/60 text-sm mt-2">
@@ -1512,8 +1575,8 @@ export default function HomePage() {
 
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 right-10 w-96 h-96 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-r from-blue-500/5 to-teal-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/3 right-10 w-96 h-96 bg-gradient-to-r from-teal-500/5 to-blue-500/5 rounded-full blur-3xl"></div>
       </div>
     </section>
 
@@ -1538,10 +1601,10 @@ export default function HomePage() {
         href="https://mail.google.com/mail/?view=cm&to=itzsamii6980@gmail.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-2xl font-bold hover:text-purple-400 transition duration-300 group inline-block"
+        className="text-2xl font-bold hover:text-teal-400 transition duration-300 group inline-block"
       >
         itzsamii6980@gmail.com
-        <div className="h-0.5 bg-purple-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+        <div className="h-0.5 bg-teal-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
       </a>
 
         {/* <div className="flex space-x-4 mt-4 text-white/60">
@@ -1590,7 +1653,7 @@ export default function HomePage() {
           name="name"
           placeholder="Your Name"
           required
-          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
           onKeyDown={(e) => e.stopPropagation()}
         />
         <input
@@ -1598,7 +1661,7 @@ export default function HomePage() {
           name="email"
           placeholder="Your Email"
           required
-          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
           onKeyDown={(e) => e.stopPropagation()}
         />
         <textarea
@@ -1606,12 +1669,12 @@ export default function HomePage() {
           placeholder="Your Message"
           rows={4}
           required
-          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
           onKeyDown={(e) => e.stopPropagation()}
         ></textarea>
         <button
           type="submit"
-          className="w-full bg-purple-600 hover:bg-purple-700 transition font-medium py-3 px-6 rounded-lg text-white"
+          className="w-full bg-teal-600 hover:bg-teal-700 transition font-medium py-3 px-6 rounded-lg text-white"
         >
           Send Message
         </button>
@@ -1620,30 +1683,26 @@ export default function HomePage() {
   </div>
 
   {/* Soft Background Circles */}
-  <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
   <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 </section>
 
 
       {/* Easter Egg Modal */}
       {showEasterEgg && (
-        <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
-          onClick={() => setShowEasterEgg(false)}
-        >
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-gray-900 p-8 rounded-lg border border-purple-500 max-w-md mx-4">
             <div className="text-center">
-              <Sparkles className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-spin" />
+              <Sparkles className="w-16 h-16 text-teal-400 mx-auto mb-4 animate-spin" />
               <h3 className="text-2xl font-bold mb-4">🎉 Easter Egg Found!</h3>
               <p className="text-white/70 mb-4">
                 Congratulations! You discovered a hidden feature. You're clearly someone who pays attention to detail!
               </p>
-              <Button onClick={() => setShowEasterEgg(false)} className="bg-purple-600 hover:bg-purple-700">
+              <Button onClick={() => setShowEasterEgg(false)} className="bg-teal-600 hover:bg-teal-700">
                 Awesome!
               </Button>
             </div>
           </div>
-          
         </div>
       )}
       </div>
