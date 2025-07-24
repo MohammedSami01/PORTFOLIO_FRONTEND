@@ -9,7 +9,10 @@ export const metadata: Metadata = {
   title: "itzsami - Front-End Software Developer",
   description:
     "Resolving design problems, building smart user interfaces and useful interactions, developing rich web applications and seamless web experiences.",
-    generator: 'itzsami.dev'
+  generator: 'itzsami.dev',
+  icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export default function RootLayout({
