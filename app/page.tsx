@@ -466,7 +466,7 @@ export default function HomePage() {
         "A futuristic, visually striking landing page inspired by cyberpunk aesthetics. Built with responsive design, smooth animations, and high-performance architecture to showcase products or services with a modern edge.",
       tech: ["Next.js", "React", "TypeScript", "Tailwind"],
       image: "/cyberpunk.png",
-      link: "https://cyberpunk-landing-page.vercel.app/",
+      link: "https://projectdemo-rosy.vercel.app/",
       github: "#", // Replace with your GitHub repo URL
       status: "Live",
       year: "2025",
@@ -1576,39 +1576,46 @@ export default function HomePage() {
         Drop a Message
       </h3>
       <form
-  action="https://formspree.io/f/xqalpyly"  // <-- Replace this
-  method="POST"
-  className="space-y-4"
->
-  <input
-    type="text"
-    name="name"
-    placeholder="Your Name"
-    required
-    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
-  <input
-    type="email"
-    name="email"
-    placeholder="Your Email"
-    required
-    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-  />
-  <textarea
-    name="message"
-    placeholder="Your Message"
-    rows={4}
-    required
-    className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-  ></textarea>
-  <button
-    type="submit"
-    className="w-full bg-purple-600 hover:bg-purple-700 transition font-medium py-3 px-6 rounded-lg text-white"
-  >
-    Send Message
-  </button>
-</form>
-
+        action="https://formspree.io/f/xqalpyly"
+        method="POST"
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const form = e.target as HTMLFormElement;
+          form.submit();
+        }}
+      >
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          required
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          onKeyDown={(e) => e.stopPropagation()}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          required
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          onKeyDown={(e) => e.stopPropagation()}
+        />
+        <textarea
+          name="message"
+          placeholder="Your Message"
+          rows={4}
+          required
+          className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          onKeyDown={(e) => e.stopPropagation()}
+        ></textarea>
+        <button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 transition font-medium py-3 px-6 rounded-lg text-white"
+        >
+          Send Message
+        </button>
+      </form>
     </div>
   </div>
 
