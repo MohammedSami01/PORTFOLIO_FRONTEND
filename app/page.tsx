@@ -463,7 +463,7 @@ export default function HomePage() {
     {
       title: "Cyberpunk Landing Page",
       description:
-        "A sleek, responsive landing page for SEO agencies, featuring smooth animations and high-performance design to showcase your services effectively.",
+        "A futuristic, visually striking landing page inspired by cyberpunk aesthetics. Built with responsive design, smooth animations, and high-performance architecture to showcase products or services with a modern edge.",
       tech: ["Next.js", "React", "TypeScript", "Tailwind"],
       image: "/cyberpunk.png",
       link: "https://cyberpunk-landing-page.vercel.app/",
